@@ -1,0 +1,13 @@
+<!-- Fragmento de Navbar reutilizable -->
+<div th:fragment="navbar">
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" th:href="@{/}">MiApp</a>
+            <ul class="nav">
+                <li class="nav-item"><a class="nav-link text-light" th:href="@{/}">Inicio</a></li>
+                <li class="nav-item"><a class="nav-link text-light" th:href="@{/about}">Acerca</a></li>
+                <li class="nav-item"><a class="nav-link text-light" th:href="@{/contact}">Contacto</a></li>
+            </ul>
+        </div>
+    </nav>
+</div>
