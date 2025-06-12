@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class CiberseguridadApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(CiberseguridadApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(CiberseguridadApplication.class, args);
+    }
 
 }

@@ -1,0 +1,77 @@
+<!-- src/main/resources/templates/sql_injection.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SQL Injection Demo</title>
+    <!-- Bootstrap WebJars -->
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
+</head>
+<body>
+    <!-- Insertar navbar -->
+    <div th:insert="~{fragments :: navbar}"></div>
+
+    <div class="container mt-4">
+        <h1 class="mb-4">Demo SQL Injection</h1>
+        <div class="row">
+            <!-- Formulario vulnerable -->
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header bg-danger text-white">
+                        Consulta Vulnerable
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/sqlinjection/bad}" method="get">
+                            <div class="mb-3">
+                                <label for="inputBad" class="form-label">Valor a filtrar</label>
+                                <input type="text"
+                                       class="form-control"
+                                       id="inputBad"
+                                       name="input"
+                                       placeholder="p. ej. ';DROP TABLE users; --" th:value="${input}">
+                            </div>
+                            <button type="submit" class="btn btn-danger">Enviar</button>
+                        </form>
+                        <p>Mete por ejemplo: ';DROP TABLE users; --</p>
+                        <div th:if="${sqlBad != null}" class="mt-3">
+                            <h5>Consulta generada:</h5>
+                            <pre class="border p-2" th:text="${sqlBad}"></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formulario seguro -->
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header bg-success text-white">
+                        Consulta Segura
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/sqlinjection/good}" method="get">
+                            <div class="mb-3">
+                                <label for="inputGood" class="form-label">Valor a filtrar</label>
+                                <input type="text"
+                                       class="form-control"
+                                       id="inputGood"
+                                       name="input"
+                                       placeholder="p. ej. juan"
+                                       th:value="${input}">
+                            </div>
+                            <button type="submit" class="btn btn-success">Enviar</button>
+                        </form>
+                        <p>Mete por ejemplo: ';DROP TABLE users; --</p>
+                        <div th:if="${sqlGood != null}" class="mt-3">
+                            <h5>Consulta generada:</h5>
+                            <pre class="border p-2" th:text="${sqlGood}"></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

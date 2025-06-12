@@ -1,0 +1,71 @@
+<!-- src/main/resources/templates/csrf_demo.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Demo CSRF</title>
+    <!-- Bootstrap WebJars -->
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
+</head>
+<body>
+<!-- Insertar navbar -->
+<div th:insert="~{fragments :: navbar}"></div>
+
+<div class="container mt-4">
+    <h1>Demo de CSRF</h1>
+    <p>Se muestran dos formularios:</p>
+    <ul>
+        <li><strong>Seguro:</strong> incluye manualmente el token CSRF.</li>
+        <li><strong>Vulnerable:</strong> no incluye token y será rechazado.</li>
+    </ul>
+
+    <div class="row">
+        <!-- Formulario con token CSRF -->
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">Con Token CSRF</div>
+                <div class="card-body">
+                    <form th:action="@{/csrf/submit-safe}" method="post">
+                        <div class="mb-3">
+                            <label for="safeData" class="form-label">Dato a enviar</label>
+                            <input type="text" class="form-control" id="safeData" name="data"
+                                   placeholder="Escribe algo..." th:value="${dataSafe}" />
+                        </div>
+                        <!-- Inserción manual del token CSRF -->
+                        <input type="hidden"
+                               th:if="${safeCsrf != null}"
+                               th:name="csrf_token"
+                               th:value="${safeCsrf}" />
+                        <button type="submit" class="btn btn-primary">Enviar Seguro</button>
+                    </form>
+                    <div th:if="${messageSafe}" class="alert alert-info mt-3" th:text="${messageSafe}"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulario sin token CSRF -->
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header bg-danger text-white">Sin Token CSRF</div>
+                <div class="card-body">
+                    <!-- Usamos action estático para evitar la autoinserción de Thymeleaf -->
+                    <form action="/csrf/submit-unsafe" method="post">
+                        <div class="mb-3">
+                            <label for="unsafeData" class="form-label">Dato a enviar</label>
+                            <input type="text" class="form-control" id="unsafeData" name="data"
+                                   placeholder="Escribe algo..." th:value="${dataUnsafe}" />
+                        </div>
+                        <!-- No se incluye token CSRF -->
+                        <button type="submit" class="btn btn-danger">Enviar Vulnerable</button>
+                    </form>
+                    <div th:if="${messageUnsafe}" class="alert alert-info mt-3" th:text="${messageUnsafe}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
