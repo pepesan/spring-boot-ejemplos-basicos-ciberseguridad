@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Demo Insecure Deserialization</title>
+    <!-- Bootstrap WebJars -->
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
+</head>
+<body>
+<!-- Insertar navbar -->
+<div th:insert="~{fragments :: navbar}"></div>
+<h1>Insecure Deserialization</h1>
+
+<!-- Mostrar fallo si existe -->
+<div th:if="${fallo}" style="color: red; margin-bottom:1em;">
+    <p th:text="${fallo}"></p>
+</div>
+
+<!-- Mostrar resultado si existe -->
+<div th:if="${result}">
+    <h2>Objeto deserializado:</h2>
+    <pre th:text="${result}"></pre>
+</div>
+
+<hr/>
+
+<section>
+    <h2>1. Deserialización Vulnerable</h2>
+    <p>Pega aquí un payload Base64 generado con <code>ObjectOutputStream</code>:</p>
+    <form th:action="@{/deserialization/vuln}" method="post">
+      <textarea name="data" rows="6" cols="80"
+                placeholder="Base64 del objeto Java…"></textarea><br/><br/>
+        <button type="submit" class="btn btn-danger">Deserializar (vulnerable)</button>
+    </form>
+</section>
+
+<hr/>
+
+<section>
+    <h2>2. Deserialización Segura</h2>
+    <p>Aplica filtro: sólo <code>Person</code> y clases <code>java.*</code>.</p>
+    <form th:action="@{/deserialization/safe}" method="post">
+      <textarea name="data" rows="6" cols="80"
+                placeholder="Mismo Base64 para probar…"></textarea><br/><br/>
+        <button type="submit" class="btn btn-success">Deserializar (seguro)</button>
+    </form>
+</section>
+
+<!-- Script para obtener y mostrar dato serial -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        fetch('http://localhost:8080/deserialization/serial')
+            .then(response => response.text())
+            .then(data => {
+                const container = document.createElement('div');
+                container.classList.add('mt-4');
+                container.innerHTML = `
+                    <h2>Serial Data:</h2>
+                    <pre>${data}</pre>
+                `;
+                document.body.insertBefore(container, document.body.firstChild);
+            })
+            .catch(error => console.error('Error fetching serial data:', error));
+    });
+</script>
+
+<!-- Bootstrap WebJars JS -->
+<script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

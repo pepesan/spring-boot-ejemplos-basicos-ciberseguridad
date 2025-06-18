@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Demo SSRF</title>
+    <!-- Bootstrap WebJars -->
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
+</head>
+<body>
+<!-- Insertar navbar -->
+<div th:insert="~{fragments :: navbar}"></div>
+<h1>SSRF</h1>
+
+<!-- Vulnerable -->
+<section>
+    <h2>1. Petición Vulnerable</h2>
+    <form th:action="@{/ssrf/vuln}" method="post">
+        <label for="url1">URL a solicitar:</label><br/>
+        <input id="url1" name="url" type="text" style="width:400px"
+               value="http://localhost:8080/actuator" required/><br/><br/>
+        <button type="submit">Enviar (vulnerable)</button>
+    </form>
+</section>
+
+<hr/>
+
+<!-- Seguro -->
+<section>
+    <h2>2. Petición Segura</h2>
+    <p>Sólo a https://api.ejemplo.com/…</p>
+    <form th:action="@{/ssrf/safe}" method="post">
+        <label for="url2">URL a solicitar:</label><br/>
+        <input id="url2" name="url" type="text" style="width:400px"
+               value="https://jsonplaceholder.typicode.com/todos/1" required/><br/><br/>
+        <button type="submit">Enviar (seguro)</button>
+    </form>
+
+    <!-- Mensaje de fallo -->
+    <div th:if="${fallo}" style="color:red; margin-top:1em">
+        <p th:text="${fallo}"></p>
+    </div>
+</section>
+
+<hr/>
+
+<!-- Mostrar resultado si lo hay -->
+<section th:if="${result}">
+    <h2>Respuesta del servidor:</h2>
+    <pre th:text="${result}"></pre>
+</section>
+<!-- Bootstrap WebJars JS -->
+<script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
