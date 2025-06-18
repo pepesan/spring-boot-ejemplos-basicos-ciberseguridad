@@ -34,7 +34,6 @@
                         </div>
                         <!-- Inserción manual del token CSRF -->
                         <input type="hidden"
-                               th:if="${safeCsrf != null}"
                                th:name="csrf_token"
                                th:value="${safeCsrf}" />
                         <button type="submit" class="btn btn-primary">Enviar Seguro</button>
