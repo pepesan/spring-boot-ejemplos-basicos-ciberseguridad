@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Demo Open Redirect</title>
+    <!-- Bootstrap WebJars -->
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
+</head>
+<body>
+<!-- Insertar navbar -->
+<div th:insert="~{fragments :: navbar}"></div>
+<h1>Open Redirect</h1>
+
+<!-- Vulnerable -->
+<section>
+    <h2>1. Redirección Vulnerable</h2>
+    <form th:action="@{/redirect/vuln}" method="get">
+        <label for="url1">Destino (cualquier URL):</label><br/>
+        <input id="url1" name="url" type="text" style="width:400px" value="http://evil.com" required/><br/><br/>
+        <button type="submit">Ir (vulnerable)</button>
+    </form>
+</section>
+
+<hr/>
+
+<!-- Seguro -->
+<section>
+    <h2>2. Redirección Segura</h2>
+    <p>Sólo rutas internas (empiezan por “/”):</p>
+    <form th:action="@{/redirect/safe}" method="get">
+        <label for="url2">Destino (ruta interna):</label><br/>
+        <input id="url2" name="url" type="text" style="width:400px" value="/home" required/><br/><br/>
+        <button type="submit">Ir (seguro)</button>
+    </form>
+
+    <!-- Mostrar fallo si existe -->
+    <div th:if="${fallo}" style="color:red; margin-top:1em">
+        <p th:text="${fallo}"></p>
+    </div>
+</section>
+<!-- Bootstrap WebJars JS -->
+<script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
