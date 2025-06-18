@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Lectura de Ficheros</title>
+    <!-- Bootstrap WebJars -->
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
+</head>
+<body>
+<!-- Insertar navbar -->
+<div th:insert="~{fragments :: navbar}"></div>
+<h1>Ejemplo de File Read</h1>
+
+<!-- Mostrar mensaje de fallo si existe -->
+<div th:if="${fallo}" style="color: red; margin-bottom: 1em;">
+    <p th:text="${fallo}"></p>
+</div>
+
+<!-- Mostrar contenido si existe -->
+<div th:if="${content}">
+    <h2>Contenido del fichero:</h2>
+    <pre th:text="${content}"></pre>
+</div>
+
+<hr/>
+
+<section>
+    <h2>1. Lectura Vulnerable (sin validación)</h2>
+    <form th:action="@{/files/read/vuln}" method="post">
+
+        <label for="dir1">Directorio:</label><br/>
+        <input id="dir1" name="directory" type="text" style="width: 400px;" required/><br/><br/>
+
+        <label for="file1">Nombre de fichero:</label><br/>
+        <input id="file1" name="filename" type="text" style="width: 400px;" required/><br/><br/>
+        <p>/tmp/ ejemplo.txt</p>
+        <button type="submit">Leer vulnerable</button>
+    </form>
+</section>
+
+<hr/>
+
+<section>
+    <h2>2. Lectura Segura (con validación)</h2>
+    <form th:action="@{/files/read/safe}" method="post">
+
+        <label for="dir2">Directorio:</label><br/>
+        <input id="dir2" name="directory" type="text" value="safeDir" style="width: 400px;" required/><br/><br/>
+
+        <label for="file2">Nombre de fichero:</label><br/>
+        <input id="file2" name="filename" type="text" style="width: 400px;" required value="ejemplo.txt"/><br/><br/>
+        <p>safeDir ejemplo.txt</p>
+        <button type="submit">Leer seguro</button>
+    </form>
+</section>
+<!-- Bootstrap WebJars JS -->
+<script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
