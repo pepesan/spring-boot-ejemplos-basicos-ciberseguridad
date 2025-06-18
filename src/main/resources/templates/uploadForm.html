@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Subida de Fichero</title>
+</head>
+<body>
+<h1>Subir un fichero</h1>
+
+<form th:action="@{/files/upload}"
+      method="post"
+      enctype="multipart/form-data">
+    <input type="file" name="file" required/><br><br>
+    <button type="submit">Subir</button>
+</form>
+
+<!-- Mensaje de éxito -->
+<div th:if="${success}" style="color: green; margin-top: 1em;">
+    <p th:text="${success}"></p>
+</div>
+</body>
+</html>

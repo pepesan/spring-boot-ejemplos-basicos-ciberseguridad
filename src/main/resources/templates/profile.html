@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Perfil de Usuario</title>
+    <!-- Bootstrap WebJars -->
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
+</head>
+<body>
+<!-- Insertar navbar -->
+<div th:insert="~{fragments :: navbar}"></div>
+<h1>Perfil de <span th:text="${id}"></span></h1>
+
+<section>
+    <h2>Información</h2>
+    <p><strong>ID:</strong> <span th:text="${id}">1</span></p>
+    <p>Prueba a cambiar el id de la url</p>
+</section>
+
+</div>
+<!-- Bootstrap WebJars JS -->
+<script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

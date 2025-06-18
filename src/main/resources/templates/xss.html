@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Demo XSS</title>
+    <!-- Bootstrap WebJars -->
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
+</head>
+<body>
+<!-- Insertar navbar -->
+<div th:insert="~{fragments :: navbar}"></div>
+<h1>Demostración de XSS</h1>
+
+<!-- Formulario vulnerable -->
+<section>
+    <h2>1. Formulario Vulnerable (sin escape)</h2>
+    <form th:action="@{/xss/vulnerable}" method="post">
+        <label for="payload1">Inserta tu payload JavaScript:</label><br>
+        <textarea id="payload1" name="payload" rows="4" cols="50"
+                  th:text="${vulnerablePayload}"></textarea><br>
+        <button type="submit">Enviar vulnerable</button>
+        <p>&lt;script&gt;alert('XSS')&lt;/script&gt;</p>
+    </form>
+
+    <h3>Resultado:</h3>
+    <!-- Aquí usamos th:utext para inyectar HTML/JS sin escapar -->
+    <div th:if="${vulnerablePayload}" th:utext="${vulnerablePayload}"></div>
+</section>
+
+<hr>
+
+<!-- Formulario seguro -->
+<section>
+    <h2>2. Formulario Seguro (con escape)</h2>
+    <form th:action="@{/xss/safe}" method="post">
+        <label for="payload2">Inserta el mismo payload:</label><br>
+        <textarea id="payload2" name="payload" rows="4" cols="50"
+                  th:text="${safePayload}"></textarea><br>
+        <button type="submit">Enviar seguro</button>
+        <p>&lt;script&gt;alert('XSS')&lt;/script&gt;</p>
+    </form>
+
+    <h3>Resultado:</h3>
+    <!-- Aquí usamos th:text para escapar automáticamente cualquier etiqueta -->
+    <div th:if="${safePayload}" th:text="${safePayload}"></div>
+</section>
+<!-- Bootstrap WebJars JS -->
+<script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
