@@ -9,7 +9,7 @@
 <body>
 <!-- Insertar navbar -->
 <div th:insert="~{fragments :: navbar}"></div>
-<h1>Insecure Deserialization</h1>
+<h1 id="title">Insecure Deserialization</h1>
 
 <!-- Mostrar fallo si existe -->
 <div th:if="${fallo}" style="color: red; margin-bottom:1em;">
@@ -58,7 +58,7 @@
                     <h2>Serial Data:</h2>
                     <pre>${data}</pre>
                 `;
-                document.body.insertBefore(container, document.body.firstChild);
+                document.body.insertBefore(container, document.getElementById("title"));
             })
             .catch(error => console.error('Error fetching serial data:', error));
     });
