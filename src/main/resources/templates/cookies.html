@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Demostración de Seguridad de Cookies</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        .attribute-label {
+            font-weight: bold;
+            color: #6c757d;
+        }
+        .attribute-value {
+            color: #007bff;
+        }
+        .attribute-true {
+            color: #28a745; /* Verde para true */
+        }
+        .attribute-false {
+            color: #dc3545; /* Rojo para false */
+        }
+        .cookie-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,.05);
+        }
+        .cookie-card h5 {
+            margin-bottom: 10px;
+            color: #343a40;
+        }
+    </style>
+</head>
+<body>
+<div th:insert="~{fragments :: navbar}"></div>
+
+<div class="container mt-4">
+    <h1>Demostración de Seguridad de Cookies</h1>
+    <p>Haz clic en los botones para establecer/borrar cookies y observa los resultados en la tabla y en las herramientas de desarrollo de tu navegador (F12 > Pestaña "Application" o "Almacenamiento").</p>
+
+    <div class="mb-4">
+        <a href="/cookies/set" class="btn btn-primary me-2">Establecer Cookies de Demo</a>
+        <a href="/cookies/clear" class="btn btn-warning">Borrar Todas las Cookies</a>
+    </div>
+
+    <h2 class="mt-5">Cookies Establecidas (Leídas por Spring Boot):</h2>
+    <div th:if="${#lists.isEmpty(existingCookies)}" class="alert alert-info">
+        No se encontraron cookies. Haz clic en "Establecer Cookies de Demo".
+    </div>
+    <div th:unless="${#lists.isEmpty(existingCookies)}">
+        <div th:each="cookie : ${existingCookies}" class="cookie-card">
+            <h5><span class="attribute-label">Nombre:</span> <span class="attribute-value" th:text="${cookie.name}"></span></h5>
+            <p><span class="attribute-label">Valor:</span> <span class="attribute-value" th:text="${cookie.value}"></span></p>
+            <p><span class="attribute-label">Dominio:</span> <span class="attribute-value" th:text="${cookie.domain ?: 'No especificado'}"></span></p>
+            <p><span class="attribute-label">Ruta:</span> <span class="attribute-value" th:text="${cookie.path ?: '/'}"></span></p>
+            <p><span class="attribute-label">Max-Age:</span> <span class="attribute-value" th:text="${cookie.maxAge}"></span> segundos</p>
+            <p>
+                <span class="attribute-label">HttpOnly:</span>
+                <span th:classappend="${cookie.httpOnly ? 'attribute-true' : 'attribute-false'}" th:text="${cookie.httpOnly ? 'Sí (No accesible por JS)' : 'No (Accesible por JS)'}"></span>
+            </p>
+            <p>
+                <span class="attribute-label">Secure:</span>
+                <span th:classappend="${cookie.secure ? 'attribute-true' : 'attribute-false'}" th:text="${cookie.secure ? 'Sí (Solo HTTPS)' : 'No (HTTP y HTTPS)'}"></span>
+            </p>
+            <p>
+                <span class="attribute-label">SameSite:</span>
+                <span class="attribute-value" th:text="${cookie.sameSiteStatus}"></span>
+                <br/>
+                <small class="text-muted">(Ver en las herramientas de desarrollo del navegador para confirmación exacta)</small>
+            </p>
+        </div>
+    </div>
+
+    <h2 class="mt-5">Observaciones Clave:</h2>
+    <ul>
+        <li><strong><code>normalCookie</code>:</strong> Accesible por JavaScript (XSS peligro), enviada por HTTP/HTTPS.</li>
+        <li><strong><code>httpOnlyCookie</code>:</strong> NO accesible por JavaScript. Protege contra robo de sesión vía XSS. ¡Esencial para cookies de sesión!</li>
+        <li><strong><code>secureCookie</code>:</strong> Solo se envía sobre HTTPS. Protege contra espionaje en redes no cifradas. (Necesitas HTTPS habilitado).</li>
+        <li><strong><code>sameSiteNoneCookie</code>:</strong> Se envía en peticiones de origen cruzado. **Requiere <code>Secure</code>.** Útil para incrustar contenido de tu dominio en sitios de terceros (ej. widgets). Si la cookie no es Secure, el navegador la ignora.</li>
+        <li><strong>Herramientas del Navegador:</strong> Abre las herramientas de desarrollo (F12) y ve a la pestaña "Application" o "Storage" (dependiendo del navegador). Busca "Cookies" y tu dominio. Ahí podrás ver todos los atributos, incluyendo "SameSite", que no siempre es directamente expuesto por la API de `HttpServletRequest.getCookies()`.</li>
+    </ul>
+
+</div>
+
+<script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
