@@ -31,14 +31,14 @@ public class CsrfController {
             HttpServletRequest request,
             Model model) {
         String token = (String) session.getAttribute("safeCsrf");
-        if (csrf_token == null &&  csrf_token.equals(token)) {
+        if (csrf_token == null ||  !csrf_token.equals(token)) {
             model.addAttribute("error", "Token invalido");
             return "fallo";
         }
         token = generarTokenUUID(128);
         // Almacena el valor bajo la clave "miClave"
         session.setAttribute("safeCsrf", token);
-        model.addAttribute("safeCsrf", csrf_token);
+        model.addAttribute("safeCsrf", token);
         model.addAttribute("messageSafe", "Formulario seguro recibido: " + data);
         model.addAttribute("dataSafe", data);
         return "csrf_demo";
