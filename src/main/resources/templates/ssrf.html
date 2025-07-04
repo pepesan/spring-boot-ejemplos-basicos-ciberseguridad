@@ -17,7 +17,7 @@
     <form th:action="@{/ssrf/vuln}" method="post">
         <label for="url1">URL a solicitar:</label><br/>
         <input id="url1" name="url" type="text" style="width:400px"
-               value="http://localhost:8080/actuator" required/><br/><br/>
+               value="https://localhost:8443/actuator" required/><br/><br/>
         <button type="submit">Enviar (vulnerable)</button>
     </form>
 </section>

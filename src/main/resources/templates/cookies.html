@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Demostración de Seguridad de Cookies</title>
-    <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link th:insert="~{fragments :: cssBoot}"></link>
     <style>
         .attribute-label {
             font-weight: bold;
@@ -81,7 +81,6 @@
     </ul>
 
 </div>
-
-<script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script th:insert="~{fragments :: jsBoot}"></script>
 </body>
 </html>
