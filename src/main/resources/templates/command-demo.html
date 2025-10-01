@@ -1,0 +1,53 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title>Demo ejecución - inseguro (simulado) vs seguro</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'">
+    <style> pre { background:#f5f5f5; padding:10px; } .warn{color:#b30} .box{border:1px solid #ddd;padding:10px;margin:10px 0} </style>
+</head>
+<body>
+<h1>Demo: ejecución de comandos (INSEGURA = SIMULADA, SEGURA = real)</h1>
+
+<div class="box">
+    <strong>Instrucciones</strong>
+    <p th:text="${instructionInsecure}">[Instrucción insegura]</p>
+    <p th:text="${instructionSecure}">[Instrucción segura]</p>
+    <p><em>Nota: modo inseguro NO EJECUTA comandos (simulación). Modo seguro ejecuta solo comandos de la whitelist.</em></p>
+</div>
+
+<form th:action="@{/command-demo}" method="post">
+    <label for="input">Entrada (texto):</label><br/>
+    <input id="input" name="input" type="text" placeholder="Ej: whoami, date, uptime, o cualquier texto para simular" style="width:400px"/><br/><br/>
+
+    <label>Modo:</label>
+    <label><input type="radio" name="mode" value="insecure" checked/> Inseguro (SIMULADO)</label>
+    <label><input type="radio" name="mode" value="secure"/> Seguro (whitelist)</label>
+    <br/><br/>
+
+    <button type="submit">Enviar</button>
+</form>
+
+<hr/>
+
+<h2>Entrada recibida</h2>
+<div class="box">
+    <p><strong>Texto bruto:</strong></p>
+    <pre th:text="${rawInput}">[raw input]</pre>
+</div>
+
+<h2>Flujo INSEGURO (SIMULADO)</h2>
+<div class="box warn" th:if="${insecureExecResult != null}">
+    <pre th:text="${insecureExecResult}">[resultado inseguro simulado]</pre>
+</div>
+
+<h2>Flujo SEGURO (ejecución real si la clave está en la whitelist)</h2>
+<div class="box" th:if="${secureResult != null}">
+    <pre th:text="${secureResult}">[resultado seguro]</pre>
+</div>
+
+<hr/>
+<p><em th:text="${note}">Nota</em></p>
+<p>Timestamp: <span th:text="${ts}">[ts]</span></p>
+</body>
+</html>
