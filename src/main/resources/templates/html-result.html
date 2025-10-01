@@ -1,0 +1,47 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <title>Resultado Inyección HTML — Demo</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'">
+    <style>
+        .box{border:1px solid #ddd;padding:12px;margin:12px 0;background:#fafafa;}
+        .warn{color:#b30;font-weight:bold;}
+        pre{background:#fff;padding:8px;border:1px solid #eee;}
+    </style>
+    <!-- Bootstrap WebJars -->
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
+</head>
+<body>
+<!-- Navbar común -->
+<div th:insert="~{fragments :: navbar}"></div>
+<h1>Resultado — demo INSEGURO vs SEGURO</h1>
+
+<div class="box">
+    <p class="warn">ADVERTENCIA: La sección "INSEGURO" muestra la entrada sin escape para demostrar el riesgo de XSS. Usar sólo en entornos de desarrollo aislados.</p>
+    <p><strong>Entrada bruta recibida:</strong></p>
+    <pre th:text="${rawComment}">[raw]</pre>
+</div>
+
+<div class="box">
+    <h2>Salida INSEGURA (demostración)</h2>
+    <p>Este bloque renderiza la entrada <em>sin</em> escape — en Thymeleaf se usa <code>th:utext</code>. <strong>Riesgo: XSS</strong></p>
+    <!-- INSECURE: muestra HTML interpretado -->
+    <div th:utext="${insecureResult}">[resultado inseguro]</div>
+</div>
+
+<div class="box">
+    <h2>Salida SEGURA</h2>
+    <p>Este bloque renderiza la entrada <em>con</em> escape — en Thymeleaf se usa <code>th:text</code>. No se interpretará HTML.</p>
+    <!-- SAFE: muestra texto escapado -->
+    <div><p th:text="${secureResult}">[resultado seguro]</p></div>
+</div>
+
+<div class="box">
+    <p><em th:text="${note}">[nota de seguridad]</em></p>
+    <p>Modo usado en el form: <strong th:text="${modeUsed}">[mode]</strong></p>
+</div>
+
+<a th:href="@{/html/form}">Volver al formulario</a>
+</body>
+</html>

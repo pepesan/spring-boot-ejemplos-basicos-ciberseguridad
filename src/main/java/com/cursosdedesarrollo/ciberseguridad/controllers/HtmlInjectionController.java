@@ -1,0 +1,61 @@
+package com.cursosdedesarrollo.ciberseguridad.controllers;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+@Controller
+@RequestMapping("/html")
+public class HtmlInjectionController {
+
+    /**
+     * GET /html/form
+     * Devuelve el formulario (html-form.html).
+     */
+    @GetMapping()
+    public String form() {
+        return "html-form";
+    }
+
+    /**
+     * POST /html/submit
+     * Procesa el comentario y prepara:
+     *  - insecureResult: el texto recibido sin escape (demo con riesgo XSS).
+     *  - secureResult: el mismo texto, pero mostrado de forma segura (escape).
+     *
+     * Parámetro opcional:
+     *  - mode: "insecure" o "secure" (solo para indicar qué boton pulsó el usuario).
+     * En este controlador devolvemos ambos resultados para comparar.
+     */
+    @PostMapping()
+    public String submit(
+            @RequestParam(name = "comment", required = false, defaultValue = "") String comment,
+            @RequestParam(name = "mode", required = false, defaultValue = "insecure") String mode,
+            Model model
+    ) {
+        // Raw input (siempre lo mostramos para evaluación didáctica)
+        model.addAttribute("rawComment", comment);
+
+        // INSEGURO: se mostrará tal cual (en la plantilla se usará th:utext)
+        model.addAttribute("insecureResult", comment);
+
+        // SEGURO: el mismo texto que se mostrará escapado (en la plantilla se usa th:text)
+        model.addAttribute("secureResult", comment);
+
+        // Información extra para la vista
+        model.addAttribute("modeUsed", mode);
+        model.addAttribute("note", "DEMO: El flujo INSEGURO usa th:utext y puede permitir XSS. No usar en producción.");
+
+        return "html-result";
+    }
+
+    /**
+     * Opcional: endpoint que muestra solo la versión segura (ejemplo didáctico).
+     * GET /html/secure
+     */
+    @GetMapping("/secure")
+    public String secureExample(Model model) {
+        model.addAttribute("instruction", "Ejemplo de visualización segura (usa th:text).");
+        return "html-safe-result"; // si quieres una vista dedicada
+    }
+}

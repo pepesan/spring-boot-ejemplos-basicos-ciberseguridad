@@ -11,8 +11,12 @@
         .payload { font-family: monospace; background:#fafafa; padding:6px; display:inline-block; margin-right:8px; }
         .btn { padding:6px 10px; margin:4px; cursor:pointer; }
     </style>
+    <!-- Bootstrap WebJars -->
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
 </head>
 <body>
+<!-- Navbar común -->
+<div th:insert="~{fragments :: navbar}"></div>
 <h1>Demo: Inyección XPath — INSEGURO vs SEGURO</h1>
 
 <div class="box">

@@ -5,8 +5,12 @@
     <title>Demo ejecución - inseguro (simulado) vs seguro</title>
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'">
     <style> pre { background:#f5f5f5; padding:10px; } .warn{color:#b30} .box{border:1px solid #ddd;padding:10px;margin:10px 0} </style>
+    <!-- Bootstrap WebJars -->
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
 </head>
 <body>
+<!-- Navbar común -->
+<div th:insert="~{fragments :: navbar}"></div>
 <h1>Demo: ejecución de comandos (INSEGURA = SIMULADA, SEGURA = real)</h1>
 
 <div class="box">

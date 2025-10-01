@@ -1,0 +1,65 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <title>Demo Inyección HTML - Formulario</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'">
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 900px; margin: 2rem; }
+        .box { border: 1px solid #ddd; padding: 12px; margin: 12px 0; background:#fafafa; }
+        .warn { color:#b30; font-weight: bold; }
+        textarea { width:100%; height:120px; }
+        .actions { margin-top:10px; display:flex; gap:12px; align-items:center; }
+        .btn { padding:8px 14px; cursor:pointer; border-radius:4px; border:1px solid #999; background:#fff; }
+        .btn-secure { background:#2d8fdd; color:#fff; border-color:#1b6fb3; }
+        .btn-insecure { background:#f2c8c8; color:#700; border-color:#d66; }
+        .note { font-size:0.9rem; color:#444; }
+    </style>
+    <!-- Bootstrap WebJars -->
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
+</head>
+<body>
+<!-- Navbar común -->
+<div th:insert="~{fragments :: navbar}"></div>
+<h1>Demo: Inyección HTML (formulario)</h1>
+
+<div class="box">
+    <p>En este ejercicio puedes enviar un <strong>comentario</strong>. El ejemplo <span class="warn">INSEGURO</span> muestra cómo el texto se renderiza sin escape en la plantilla de resultado; el ejemplo <span style="color:green">SEGURO</span> muestra el mismo texto escapado.</p>
+    <p class="warn">ADVERTENCIA: solo usar en entornos de desarrollo/aislados. No enviar contenido real ni ejecutar esto en producción.</p>
+</div>
+
+<!-- Único formulario que envía 'mode' según el botón que se pulse -->
+<form th:action="@{/html}" method="post" id="commentForm">
+    <label for="comment"><strong>Comentario</strong> (prueba: &lt;b style="color:red"&gt;Hacked!&lt;/b&gt; o &lt;img src=x onerror=alert(1)&gt; )</label><br/>
+    <textarea id="comment" name="comment" placeholder="Escribe aquí tu comentario..."></textarea>
+
+    <div class="actions">
+        <!-- Botón inseguro: envía mode=insecure -->
+        <button type="submit" class="btn btn-insecure" name="mode" value="insecure">
+            Enviar (INSEGURO — demo)
+        </button>
+
+        <!-- Botón seguro: envía mode=secure -->
+        <button type="submit" class="btn btn-secure" name="mode" value="secure">
+            Enviar (SEGURO)
+        </button>
+
+        <!-- Enlace rápido a la versión segura dedicada (opcional) -->
+        <a th:href="@{/html/secure}" style="margin-left:12px" class="note">Ver ejemplo seguro (solo visual)</a>
+    </div>
+</form>
+
+<hr/>
+
+<div class="box">
+    <strong>Notas / cómo probar</strong>
+    <ul>
+        <li>Botón <strong>INSEGURO</strong>: el controlador procesará el comentario y la vista mostrará la sección insegura (con <code>th:utext</code>) — esto demuestra XSS si el comentario contiene HTML/script.</li>
+        <li>Botón <strong>SEGURO</strong>: el controlador procesará el comentario y la vista mostrará la sección segura (con <code>th:text</code>) — el HTML no se interpretará.</li>
+        <li>Ejemplo de payload: <code>&lt;img src=x onerror=alert(1)&gt;</code> — en INSEGURO puede provocar ejecución (solo en entornos de prueba), en SEGURO se verá como texto.</li>
+        <li>Si tu app tiene CSRF habilitado (Spring Security), asegúrate de añadir el token `_csrf` en el formulario (Thymeleaf lo añade automáticamente si usas el dialecto y configuración de Spring Security).</li>
+    </ul>
+</div>
+
+</body>
+</html>
