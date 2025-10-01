@@ -1,0 +1,87 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <title>Demo XPath - inseguro vs seguro</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'">
+    <style>
+        pre { background:#f5f5f5; padding:10px; }
+        .warn{color:#b30}
+        .box{border:1px solid #ddd;padding:10px;margin:10px 0}
+        .payload { font-family: monospace; background:#fafafa; padding:6px; display:inline-block; margin-right:8px; }
+        .btn { padding:6px 10px; margin:4px; cursor:pointer; }
+    </style>
+</head>
+<body>
+<h1>Demo: Inyección XPath — INSEGURO vs SEGURO</h1>
+
+<div class="box">
+    <p th:text="${instructionInsecure}">[Instrucción insegura]</p>
+    <p th:text="${instructionSecure}">[Instrucción segura]</p>
+    <p><em>Uso: demo educativa. El modo inseguro demuestra la concatenación (puede ser vulnerable).</em></p>
+    <p class="warn"><strong>ADVERTENCIA:</strong> solo probar en entornos de desarrollo aislados. No utilizar contra sistemas reales.</p>
+</div>
+
+<div class="box">
+    <strong>Ejemplos de payloads de inyección XPath (solo para demo):</strong>
+    <div style="margin:8px 0;">
+
+        <span class="payload">Ana</span>
+
+
+        <span class="payload">Ana' or '1'='1</span>
+
+        <span class="payload">' or '1'='1</span>
+
+        <span class="payload">O&apos;Brien</span>
+        <
+    </div>
+
+    <p>Descripción breve:</p>
+    <ul>
+        <li><code>Ana</code> — entrada normal, debería devolver el email de Ana.</li>
+        <li><code>Ana' or '1'='1</code> — payload clásico que puede forzar la condición a verdad y devolver datos no previstos (en modo inseguro).</li>
+        <li><code>' or '1'='1</code> — payload que elimina la parte del literal y deja solo la condición verdadera.</li>
+        <li><code>O&apos;Brien</code> — nombre con apóstrofo; el flujo seguro lo maneja con <code>concat(...)</code>.</li>
+    </ul>
+</div>
+
+<form th:action="@{/xpath-demo}" method="post" id="demoForm">
+    <label for="input">Nombre a buscar:</label><br/>
+    <input id="input" name="input" type="text" placeholder="Ej: Ana" style="width:300px"/><br/><br/>
+
+    <label>Modo:</label>
+    <label><input type="radio" name="mode" value="insecure" checked/> Inseguro (concatenación)</label>
+    <label><input type="radio" name="mode" value="secure"/> Seguro (whitelist + literal seguro)</label>
+    <br/><br/>
+
+    <button type="submit">Enviar</button>
+</form>
+
+<hr/>
+
+<h2>Entrada recibida</h2>
+<div class="box">
+    <pre th:text="${rawInput}">[raw input]</pre>
+</div>
+
+<h2>Resultado INSEGURO (evaluación por concatenación)</h2>
+<div class="box warn">
+    <pre th:text="${insecureResult}">[resultado inseguro]</pre>
+</div>
+
+<h2>Resultado SEGURO (validado y literal seguro)</h2>
+<div class="box">
+    <pre th:text="${secureResult}">[resultado seguro]</pre>
+</div>
+
+<hr/>
+<div th:if="${error != null}" class="box warn">
+    <strong>Error:</strong>
+    <pre th:text="${error}">[error]</pre>
+</div>
+
+<p><em>Recuerda: esta demo es para aprendizaje. En producción no uses concatenación directa ni confíes en datos del cliente.</em></p>
+
+</body>
+</html>

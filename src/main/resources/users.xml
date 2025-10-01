@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<users>
+    <user>
+        <name>Ana</name>
+        <email>ana@example.com</email>
+    </user>
+    <user>
+        <name>Pablo</name>
+        <email>pablo@example.com</email>
+    </user>
+    <user>
+        <name>Admin</name>
+        <email>admin@example.local</email>
+    </user>
+</users>
