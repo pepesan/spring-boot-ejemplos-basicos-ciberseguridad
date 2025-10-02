@@ -63,3 +63,17 @@ La aplicación incluye (entre otros) los siguientes enlaces como elementos de na
 /command-demo — SO Command injection (ejemplo de ejecución de comandos con entrada inadecuadamente saneada)
 
 Estos endpoints están diseñados para mostrar la vulnerabilidad de manera clara. El comportamiento exacto (payloads aceptados, respuestas, parámetros) depende de la implementación del proyecto.
+
+## HTTP AUTH BASIC
+### Sin credenciales -> 401 + WWW-Authenticate: Basic realm="demo-realm"
+curl -i http://localhost:8080/basic/secure
+
+### Con credenciales correctas
+curl -i -u user:password http://localhost:8080/basic/secure
+
+## HTTP AUTH DIGEST
+### Paso 1: obtén el reto -> 401 con WWW-Authenticate: Digest ...
+curl -i http://localhost:8080/digest/secure
+
+### Paso 2: usa curl con --digest (gestionará nonce/nc/cnonce automáticamente)
+curl -i --digest -u user:password http://localhost:8080/digest/secure
