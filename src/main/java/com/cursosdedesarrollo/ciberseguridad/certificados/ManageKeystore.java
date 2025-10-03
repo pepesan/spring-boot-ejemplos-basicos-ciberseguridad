@@ -1,0 +1,81 @@
+package com.cursosdedesarrollo.ciberseguridad.certificados;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.security.KeyStore;
+import java.security.cert.Certificate;
+import java.security.cert.X509Certificate;
+import java.util.Enumeration;
+import java.util.Scanner;
+
+public class ManageKeystore {
+    public static void main(String[] args) throws Exception {
+        // --- Configuración ---
+        String keystorePath = "miKeystore.p12";        // tu PKCS12
+        String keystoreType = "PKCS12";                // tipo
+        char[] keystorePass = "changeit".toCharArray(); // contraseña del keystore
+
+        // 1) Cargar el keystore
+        KeyStore ks = KeyStore.getInstance(keystoreType);
+        try (FileInputStream fis = new FileInputStream(keystorePath)) {
+            ks.load(fis, keystorePass);
+        }
+
+        // 2) Listar todas las entradas
+        System.out.println("Contenido de " + keystorePath + ":");
+        Enumeration<String> aliases = ks.aliases();
+        while (aliases.hasMoreElements()) {
+            String alias = aliases.nextElement();
+            System.out.println("Alias: " + alias);
+
+            if (ks.isKeyEntry(alias)) {
+                System.out.println(" - Tipo: Entrada de clave (private key + certificado)");
+                Certificate[] chain = ks.getCertificateChain(alias);
+                if (chain != null) {
+                    for (int i = 0; i < chain.length; i++) {
+                        System.out.println("   Certificado #" + (i+1) + ":");
+                        printCertInfo((X509Certificate) chain[i]);
+                    }
+                }
+            } else if (ks.isCertificateEntry(alias)) {
+                System.out.println(" - Tipo: Certificado confiable (sin clave privada)");
+                Certificate cert = ks.getCertificate(alias);
+                if (cert instanceof X509Certificate x509) {
+                    printCertInfo(x509);
+                }
+            }
+            System.out.println("--------------------------------------------------");
+        }
+
+        // 3) Preguntar si se desea eliminar un alias
+        Scanner sc = new Scanner(System.in);
+        System.out.print("¿Deseas eliminar un certificado? (s/n): ");
+        String respuesta = sc.nextLine();
+        if (respuesta.equalsIgnoreCase("s")) {
+            System.out.print("Introduce el alias a eliminar: ");
+            String aliasEliminar = sc.nextLine();
+
+            if (ks.containsAlias(aliasEliminar)) {
+                ks.deleteEntry(aliasEliminar);
+                try (FileOutputStream fos = new FileOutputStream(keystorePath)) {
+                    ks.store(fos, keystorePass);
+                }
+                System.out.println("Alias '" + aliasEliminar + "' eliminado y cambios guardados.");
+            } else {
+                System.out.println("El alias '" + aliasEliminar + "' no existe en el keystore.");
+            }
+        } else {
+            System.out.println("No se ha eliminado nada.");
+        }
+    }
+
+    private static void printCertInfo(X509Certificate cert) {
+        System.out.println("   Sujeto: " + cert.getSubjectDN());
+        System.out.println("   Emisor : " + cert.getIssuerDN());
+        System.out.println("   Válido desde: " + cert.getNotBefore());
+        System.out.println("   Válido hasta: " + cert.getNotAfter());
+        System.out.println("   Nº Serie: " + cert.getSerialNumber());
+        System.out.println("   Algoritmo firma: " + cert.getSigAlgName());
+    }
+}
+
