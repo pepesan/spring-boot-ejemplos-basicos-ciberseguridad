@@ -76,7 +76,7 @@ public class CookieSecurityController {
                 "; Path=" + sameSiteNoneSecureCookie.getPath() +
                 "; HttpOnly=" + sameSiteNoneSecureCookie.isHttpOnly() +
                 "; Secure=" + sameSiteNoneSecureCookie.getSecure() +
-                "; SameSite=None");
+                "; SameSite=Strict");
 
         return "redirect:/cookies";
     }
