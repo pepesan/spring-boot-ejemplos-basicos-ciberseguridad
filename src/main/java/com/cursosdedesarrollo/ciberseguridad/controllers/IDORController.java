@@ -15,11 +15,13 @@ public class IDORController {
     // Mostrar perfil de usuario sin comprobar que sea el propio
     @GetMapping("/control/{id}")
     public String getControlUserProfile(@PathVariable Long id, Model model) {
+        // Validar que tenermos acceso a ese recurso
         if (id == 1) {
+            // damos acceso a ello
             model.addAttribute("id", id);
             return "profile";
         }else {
-            // 2) Si no coincide, lanzamos una excepción
+            // 2) Si no tenemos permisos de acceso, lanzamos una excepción
             throw new IllegalArgumentException("ID rechazado: ID no válido");
         }
 
