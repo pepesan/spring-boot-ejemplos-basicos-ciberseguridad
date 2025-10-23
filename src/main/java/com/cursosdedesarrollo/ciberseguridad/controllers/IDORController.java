@@ -15,7 +15,7 @@ public class IDORController {
     // Mostrar perfil de usuario sin comprobar que sea el propio
     @GetMapping("/control/{id}")
     public String getControlUserProfile(@PathVariable Long id, Model model) {
-        // Validar que tenermos acceso a ese recurso
+        // Validar que tenemos acceso a ese recurso
         if (id == 1) {
             // damos acceso a ello
             model.addAttribute("id", id);
