@@ -66,14 +66,14 @@ Estos endpoints están diseñados para mostrar la vulnerabilidad de manera clara
 
 ## HTTP AUTH BASIC
 ### Sin credenciales -> 401 + WWW-Authenticate: Basic realm="demo-realm"
-curl -i https://localhost:8443/basic/secure
+curl -i -k https://localhost:8443/basic/secure
 
 ### Con credenciales correctas
-curl -i -u user:password https://localhost:8443/basic/secure
+curl -i -u user:password -k https://localhost:8443/basic/secure
 
 ## HTTP AUTH DIGEST
 ### Paso 1: obtén el reto -> 401 con WWW-Authenticate: Digest ...
-curl -i https://localhost:8443/digest/secure
+curl -i -k https://localhost:8443/digest/secure
 
 ### Paso 2: usa curl con --digest (gestionará nonce/nc/cnonce automáticamente)
-curl -i --digest -u user:password https://localhost:8443/digest/secure
+curl -i --digest -u user:password -k https://localhost:8443/digest/secure
