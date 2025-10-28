@@ -53,9 +53,13 @@ public class HtmlInjectionController {
      * Opcional: endpoint que muestra solo la versión segura (ejemplo didáctico).
      * GET /html/secure
      */
-    @GetMapping("/secure")
-    public String secureExample(Model model) {
+    @PostMapping("/secure")
+    public String secureExample(Model model,
+                                @RequestParam(name = "comment", required = false, defaultValue = "") String comment) {
         model.addAttribute("instruction", "Ejemplo de visualización segura (usa th:text).");
+        // SEGURO: el mismo texto que se mostrará escapado (en la plantilla se usa th:text)
+        model.addAttribute("safeComment", comment);
+
         return "html-safe-result"; // si quieres una vista dedicada
     }
 }

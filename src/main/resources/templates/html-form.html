@@ -28,7 +28,7 @@
     <p class="warn">ADVERTENCIA: solo usar en entornos de desarrollo/aislados. No enviar contenido real ni ejecutar esto en producción.</p>
 </div>
 
-<!-- Único formulario que envía 'mode' según el botón que se pulse -->
+<!-- Formulario INSEGURO -->
 <form th:action="@{/html}" method="post" id="commentForm">
     <label for="comment"><strong>Comentario</strong> (prueba: &lt;b style="color:red"&gt;Hacked!&lt;/b&gt; o &lt;img src=x onerror=alert(1)&gt; )</label><br/>
     <textarea id="comment" name="comment" placeholder="Escribe aquí tu comentario..."></textarea>
@@ -38,14 +38,18 @@
         <button type="submit" class="btn btn-insecure" name="mode" value="insecure">
             Enviar (INSEGURO — demo)
         </button>
+    </div>
+</form>
 
-        <!-- Botón seguro: envía mode=secure -->
-        <button type="submit" class="btn btn-secure" name="mode" value="secure">
-            Enviar (SEGURO)
+<!-- Formulario SEGURO (envía directamente a /htmlsecure) -->
+<form th:action="@{/html/secure}" method="post" id="secureForm">
+    <label for="commentSecure"><strong>Comentario (versión segura directa)</strong></label><br/>
+    <textarea id="commentSecure" name="comment" placeholder="Escribe aquí tu comentario..."></textarea>
+
+    <div class="actions">
+        <button type="submit" class="btn btn-secure">
+            Enviar (SEGURO — directo)
         </button>
-
-        <!-- Enlace rápido a la versión segura dedicada (opcional) -->
-        <a th:href="@{/html/secure}" style="margin-left:12px" class="note">Ver ejemplo seguro (solo visual)</a>
     </div>
 </form>
 
@@ -55,9 +59,9 @@
     <strong>Notas / cómo probar</strong>
     <ul>
         <li>Botón <strong>INSEGURO</strong>: el controlador procesará el comentario y la vista mostrará la sección insegura (con <code>th:utext</code>) — esto demuestra XSS si el comentario contiene HTML/script.</li>
-        <li>Botón <strong>SEGURO</strong>: el controlador procesará el comentario y la vista mostrará la sección segura (con <code>th:text</code>) — el HTML no se interpretará.</li>
+        <li>Formulario <strong>SEGURO directo</strong>: envía los datos a <code>/htmlsecure</code>, que debería renderizar el texto escapado usando <code>th:text</code>.</li>
         <li>Ejemplo de payload: <code>&lt;img src=x onerror=alert(1)&gt;</code> — en INSEGURO puede provocar ejecución (solo en entornos de prueba), en SEGURO se verá como texto.</li>
-        <li>Si tu app tiene CSRF habilitado (Spring Security), asegúrate de añadir el token `_csrf` en el formulario (Thymeleaf lo añade automáticamente si usas el dialecto y configuración de Spring Security).</li>
+        <li>Si tu app tiene CSRF habilitado (Spring Security), asegúrate de añadir el token `_csrf` en los formularios (Thymeleaf lo añade automáticamente si usas el dialecto y configuración de Spring Security).</li>
     </ul>
 </div>
 
