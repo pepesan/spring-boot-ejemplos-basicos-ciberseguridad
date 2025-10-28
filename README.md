@@ -30,6 +30,18 @@ Maven
    ```
 Es posible que debas aceptar un certificado autofirmado en tu navegador.
 
+## Ejecución desde el IDE
+1. Construye el proyecto con Maven:
+   ```bash
+   mvn clean spring-boot:run
+   ```
+2. Ejecuta tu aplicación en el IDE
+3. Accede a la aplicación en tu navegador web:
+```
+https://localhost:8443
+```
+Es posible que debas aceptar un certificado autofirmado en tu navegador.
+
 
 
 ## Endpoints expuestos
