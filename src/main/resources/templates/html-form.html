@@ -38,11 +38,14 @@
         <button type="submit" class="btn btn-insecure" name="mode" value="insecure">
             Enviar (INSEGURO — demo)
         </button>
+
+        <!-- Enlace rápido a la versión segura dedicada (opcional) -->
+        <a th:href="@{/html/secure}" style="margin-left:12px" class="note">Ver ejemplo seguro (solo visual)</a>
     </div>
 </form>
 
 <!-- Formulario SEGURO (envía directamente a /htmlsecure) -->
-<form th:action="@{/html/secure}" method="post" id="secureForm">
+<form th:action="@{/htmlsecure}" method="post" id="secureForm">
     <label for="commentSecure"><strong>Comentario (versión segura directa)</strong></label><br/>
     <textarea id="commentSecure" name="comment" placeholder="Escribe aquí tu comentario..."></textarea>
 
