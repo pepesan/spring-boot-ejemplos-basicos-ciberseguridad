@@ -22,7 +22,7 @@ public class FileUploadController {
     }
 
     // Tamaño máximo en bytes (por ejemplo, 5 MB)
-    private static final long MAX_FILE_SIZE = 5 * 1024 * 1024;
+    private static final long MAX_FILE_SIZE = 5 * 1024 * 1024L;
 
     // Extensiones permitidas (sin punto)
     private static final List<String> ALLOWED_EXTENSIONS = Arrays.asList("png", "jpg", "jpeg", "txt", "pdf");

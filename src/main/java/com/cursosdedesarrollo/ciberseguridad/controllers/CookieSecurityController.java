@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import com.cursosdedesarrollo.ciberseguridad.dtos.CookieDisplayDto;
@@ -17,6 +16,9 @@ import com.cursosdedesarrollo.ciberseguridad.dtos.CookieDisplayDto;
 @Controller
 @RequestMapping("/cookies")
 public class CookieSecurityController {
+
+    public static final String SAME_SITE_NONE_COOKIE = "sameSiteNoneCookie";
+
     @GetMapping
     public String showCookiePage(HttpServletRequest request, Model model) {
         List<CookieDisplayDto> displayCookies = new ArrayList<>();
@@ -24,7 +26,7 @@ public class CookieSecurityController {
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 // Check for the manually set SameSite=None cookie to provide correct status
-                if ("sameSiteNoneCookie".equals(cookie.getName())) {
+                if (SAME_SITE_NONE_COOKIE.equals(cookie.getName())) {
                     displayCookies.add(new CookieDisplayDto(
                             cookie.getName(),
                             cookie.getValue(),
@@ -67,7 +69,7 @@ public class CookieSecurityController {
         response.addCookie(secureCookie);
 
         // 4. Cookie con SameSite=None (requiere Secure) - Añadido directamente al header
-        Cookie sameSiteNoneSecureCookie = new Cookie("sameSiteNoneCookie", "valorSameSiteNone");
+        Cookie sameSiteNoneSecureCookie = new Cookie(SAME_SITE_NONE_COOKIE, "valorSameSiteNone");
         sameSiteNoneSecureCookie.setMaxAge(60 * 5);
         sameSiteNoneSecureCookie.setPath("/");
         sameSiteNoneSecureCookie.setSecure(true);
@@ -94,7 +96,7 @@ public class CookieSecurityController {
                 // For simplicity in this demo, we assume default path and no domain for deletion.
                 // For SameSite=None cookies, you might need to re-add the SameSite=None attribute for deletion to work.
                 // For this demo, let's keep it simple for `clear`.
-                if ("sameSiteNoneCookie".equals(cookie.getName())) {
+                if (SAME_SITE_NONE_COOKIE.equals(cookie.getName())) {
                     response.addHeader("Set-Cookie", cookie.getName() + "=; Max-Age=0; Path=/; Secure; SameSite=None");
                 } else {
                     response.addCookie(cookie);
