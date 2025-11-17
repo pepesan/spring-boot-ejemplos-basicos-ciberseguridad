@@ -30,6 +30,7 @@ public class IDORController {
     // Mostrar perfil de usuario sin comprobar que sea el propio
     @GetMapping("/{id}")
     public String getUserProfile(@PathVariable Long id, Model model) {
+        // pillar los datos del perfil para enviarlos a la vista
         model.addAttribute("id", id);
         return "profile";
     }
