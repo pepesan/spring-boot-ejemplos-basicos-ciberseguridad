@@ -30,7 +30,7 @@
 
 <!-- Formulario INSEGURO -->
 <form th:action="@{/html}" method="post" id="commentForm">
-    <label for="comment"><strong>Comentario</strong> (prueba: &lt;b style="color:red"&gt;Hacked!&lt;/b&gt; o &lt;img src=x onerror=alert(1)&gt; )</label><br/>
+    <label for="comment"><strong>Comentario</strong> (prueba: &lt;p style="color:red"&gt;Hacked!&lt;/p&gt; o &lt;img src=x onerror=alert(1)&gt; )</label><br/>
     <textarea id="comment" name="comment" placeholder="Escribe aquí tu comentario..."></textarea>
 
     <div class="actions">

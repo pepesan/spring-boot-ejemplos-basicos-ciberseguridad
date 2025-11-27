@@ -65,6 +65,8 @@ public class HtmlInjectionController {
         // Sanitizamos el valor recibido para eliminar HTML potencialmente peligroso
         String sanitizedComment = Jsoup.clean(comment, Safelist.basic());
         log.info("Sanitized comment: {}", sanitizedComment);
+        // Elimina cualquier etiqueta o atributo peligroso
+        sanitizedComment = Jsoup.clean(comment, Safelist.none());
         model.addAttribute("instruction", "Ejemplo de visualización segura (usa th:text).");
         // SEGURO: el mismo texto que se mostrará escapado (en la plantilla se usa th:text)
         model.addAttribute("safeComment", sanitizedComment);

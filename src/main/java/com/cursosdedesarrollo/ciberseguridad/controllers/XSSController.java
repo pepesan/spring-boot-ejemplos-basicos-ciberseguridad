@@ -46,7 +46,10 @@ public class XSSController {
             throw new IllegalArgumentException("Payload rechazado: contenido potencialmente peligroso");
         }
         // Alternativamente, podríamos usar Jsoup para sanitizar el input
+        // Esto permite cierto HTML seguro, pero elimina scripts y atributos peligrosos
         String sanitizedComment = Jsoup.clean(payload, Safelist.basic());
+        // Elimina cualquier etiqueta o atributo peligroso
+        sanitizedComment = Jsoup.clean(payload, Safelist.none());
         log.info("Sanitized payload: {}", sanitizedComment);
         // 3) Si pasa, lo añadimos al modelo para renderizarlo escapado
         model.addAttribute("safePayload", sanitizedComment);
