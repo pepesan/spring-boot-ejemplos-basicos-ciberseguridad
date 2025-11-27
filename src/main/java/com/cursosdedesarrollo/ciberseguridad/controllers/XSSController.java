@@ -1,5 +1,8 @@
 package com.cursosdedesarrollo.ciberseguridad.controllers;
 
+import lombok.extern.slf4j.Slf4j;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Safelist;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +12,7 @@ import java.util.regex.Matcher;
 
 @Controller
 @RequestMapping("/xss")
+@Slf4j
 public class XSSController {
 
     // 1. Mostrar el formulario inicial
@@ -41,8 +45,11 @@ public class XSSController {
             // 2) Si coincide, lanzamos una excepción
             throw new IllegalArgumentException("Payload rechazado: contenido potencialmente peligroso");
         }
+        // Alternativamente, podríamos usar Jsoup para sanitizar el input
+        String sanitizedComment = Jsoup.clean(payload, Safelist.basic());
+        log.info("Sanitized payload: {}", sanitizedComment);
         // 3) Si pasa, lo añadimos al modelo para renderizarlo escapado
-        model.addAttribute("safePayload", payload);
+        model.addAttribute("safePayload", sanitizedComment);
         return "xss";
     }
 }
