@@ -67,8 +67,8 @@ public class FileUploadController {
             if (!Files.exists(uploadPath)) {
                 Files.createDirectories(uploadPath);
             }
-            Path target = uploadPath.resolve(file.getOriginalFilename());
-            file.transferTo(target.toFile());
+                Path target = uploadPath.resolve(file.getOriginalFilename());
+                file.transferTo(target.toFile());
         } catch (IOException e) {
             // Si falla el guardado, propagamos un RuntimeException
             throw new RuntimeException("Error al guardar el fichero.", e);

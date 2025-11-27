@@ -10,7 +10,7 @@ import java.nio.file.*;
 @Controller
 @Slf4j
 @RequestMapping("/files/read")
-public class FileReadController {
+public class PathTransversalFileReadController {
 
     // Base seguro para el formulario “safe”
     private static final Path BASE_DIR = Paths.get("safeDir").toAbsolutePath().normalize();
