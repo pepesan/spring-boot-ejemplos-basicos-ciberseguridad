@@ -1,11 +1,15 @@
 package com.cursosdedesarrollo.ciberseguridad.controllers;
 
+import lombok.extern.slf4j.Slf4j;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Safelist;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/html")
+@Slf4j
 public class HtmlInjectionController {
 
     /**
@@ -56,9 +60,16 @@ public class HtmlInjectionController {
     @PostMapping("/secure")
     public String secureExample(Model model,
                                 @RequestParam(name = "comment", required = false, defaultValue = "") String comment) {
+        // Comprobamos que el comentario es seguro
+        // Usando alguna biblioteca que valide o sanee el input
+        // Sanitizamos el valor recibido para eliminar HTML potencialmente peligroso
+        String sanitizedComment = Jsoup.clean(comment, Safelist.basic());
+        log.info("Sanitized comment: {}", sanitizedComment);
+        // Elimina cualquier etiqueta o atributo peligroso
+        sanitizedComment = Jsoup.clean(comment, Safelist.none());
         model.addAttribute("instruction", "Ejemplo de visualización segura (usa th:text).");
         // SEGURO: el mismo texto que se mostrará escapado (en la plantilla se usa th:text)
-        model.addAttribute("safeComment", comment);
+        model.addAttribute("safeComment", sanitizedComment);
 
         return "html-safe-result"; // si quieres una vista dedicada
     }

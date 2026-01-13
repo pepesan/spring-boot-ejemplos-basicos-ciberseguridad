@@ -30,7 +30,7 @@
 
 <!-- Formulario INSEGURO -->
 <form th:action="@{/html}" method="post" id="commentForm">
-    <label for="comment"><strong>Comentario</strong> (prueba: &lt;b style="color:red"&gt;Hacked!&lt;/b&gt; o &lt;img src=x onerror=alert(1)&gt; )</label><br/>
+    <label for="comment"><strong>Comentario</strong> (prueba: &lt;p style="color:red"&gt;Hacked!&lt;/p&gt; o &lt;img src=x onerror=alert(1)&gt; )</label><br/>
     <textarea id="comment" name="comment" placeholder="Escribe aquí tu comentario..."></textarea>
 
     <div class="actions">
@@ -45,7 +45,7 @@
 </form>
 
 <!-- Formulario SEGURO (envía directamente a /htmlsecure) -->
-<form th:action="@{/htmlsecure}" method="post" id="secureForm">
+<form th:action="@{/html/secure}" method="post" id="secureForm">
     <label for="commentSecure"><strong>Comentario (versión segura directa)</strong></label><br/>
     <textarea id="commentSecure" name="comment" placeholder="Escribe aquí tu comentario..."></textarea>
 

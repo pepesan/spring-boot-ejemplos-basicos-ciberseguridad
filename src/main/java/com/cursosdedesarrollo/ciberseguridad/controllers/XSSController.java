@@ -1,6 +1,9 @@
 package com.cursosdedesarrollo.ciberseguridad.controllers;
 
 import org.owasp.encoder.Encode;
+import lombok.extern.slf4j.Slf4j;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Safelist;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +13,7 @@ import java.util.regex.Matcher;
 
 @Controller
 @RequestMapping("/xss")
+@Slf4j
 public class XSSController {
 
     // 1. Mostrar el formulario inicial
@@ -46,6 +50,14 @@ public class XSSController {
         String payloadLimpio= Encode.forHtml(payload);
         // 4) Si pasa, lo añadimos al modelo para renderizarlo escapado
         model.addAttribute("safePayload", payloadLimpio);
+        // Alternativamente, podríamos usar Jsoup para sanitizar el input
+        // Esto permite cierto HTML seguro, pero elimina scripts y atributos peligrosos
+        String sanitizedComment = Jsoup.clean(payload, Safelist.basic());
+        // Elimina cualquier etiqueta o atributo peligroso
+        sanitizedComment = Jsoup.clean(payload, Safelist.none());
+        log.info("Sanitized payload: {}", sanitizedComment);
+        // 3) Si pasa, lo añadimos al modelo para renderizarlo escapado
+        model.addAttribute("safePayload", sanitizedComment);
         return "xss";
     }
 }
