@@ -49,14 +49,14 @@ public class XSSController {
         // 3) Escape del payload para HTML
         String payloadLimpio= Encode.forHtml(payload);
         // 4) Si pasa, lo añadimos al modelo para renderizarlo escapado
-        model.addAttribute("safePayload", payloadLimpio);
+        // model.addAttribute("safePayload", payloadLimpio);
         // Alternativamente, podríamos usar Jsoup para sanitizar el input
         // Esto permite cierto HTML seguro, pero elimina scripts y atributos peligrosos
         String sanitizedComment = Jsoup.clean(payload, Safelist.basic());
         // Elimina cualquier etiqueta o atributo peligroso
         sanitizedComment = Jsoup.clean(payload, Safelist.none());
         log.info("Sanitized payload: {}", sanitizedComment);
-        // 3) Si pasa, lo añadimos al modelo para renderizarlo escapado
+        // 5) Si pasa, lo añadimos al modelo para renderizarlo escapado
         model.addAttribute("safePayload", sanitizedComment);
         return "xss";
     }
