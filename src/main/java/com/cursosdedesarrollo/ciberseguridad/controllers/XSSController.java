@@ -1,5 +1,6 @@
 package com.cursosdedesarrollo.ciberseguridad.controllers;
 
+import org.owasp.encoder.Encode;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -37,12 +38,14 @@ public class XSSController {
     public String safe(@RequestParam String payload, Model model) {
         // 1) Validación contra XSS
         Matcher m = XSS_DETECT_PATTERN.matcher(payload);
-        if (m.find()) {
+         if (m.find()) {
             // 2) Si coincide, lanzamos una excepción
-            throw new IllegalArgumentException("Payload rechazado: contenido potencialmente peligroso");
+             throw new IllegalArgumentException("Payload rechazado: contenido potencialmente peligroso");
         }
-        // 3) Si pasa, lo añadimos al modelo para renderizarlo escapado
-        model.addAttribute("safePayload", payload);
+        // 3) Escape del payload para HTML
+        String payloadLimpio= Encode.forHtml(payload);
+        // 4) Si pasa, lo añadimos al modelo para renderizarlo escapado
+        model.addAttribute("safePayload", payloadLimpio);
         return "xss";
     }
 }

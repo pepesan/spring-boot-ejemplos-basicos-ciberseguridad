@@ -38,6 +38,9 @@ public class SqlInjectionController {
         if (input != null) {
             // Consulta parametrizada (mostramos solo la plantilla de la query)
             String sqlGood = "SELECT * FROM users WHERE username = ?";
+            // añadirimos el parámetro de forma segura en la ejecución real
+            // ejemplo: preparedStatement.setString(1, input);
+            // ejemplo: ResultSet rs = preparedStatement.executeQuery();
             model.addAttribute("sqlGood", sqlGood);
             model.addAttribute("input", input);
         }

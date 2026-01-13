@@ -91,6 +91,15 @@
             <artifactId>bcpkix-jdk18on</artifactId>
             <version>1.82</version>
         </dependency>
+        <!-- Source: https://mvnrepository.com/artifact/org.owasp.encoder/encoder
+         biblioteca de limpieza de entradas para prevenir ataques XSS
+        -->
+        <dependency>
+            <groupId>org.owasp.encoder</groupId>
+            <artifactId>encoder</artifactId>
+            <version>1.4.0</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>
