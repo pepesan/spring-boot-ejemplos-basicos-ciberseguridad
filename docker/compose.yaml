@@ -1,0 +1,30 @@
+services:
+  juice-shop:
+    image: bkimminich/juice-shop:latest
+    container_name: juice-shop-dev
+    restart: unless-stopped
+    # Puerto por defecto de Juice Shop (3000); no choca con el proxy de
+    # OWASP ZAP (8080) ni con los puertos web habituales de Java (8081,
+    # 8443, 9090...) ni con 80/443.
+    ports:
+      - "3000:3000"
+
+  sonarqube:
+    image: sonarqube:community
+    container_name: sonarqube-dev
+    restart: unless-stopped
+    environment:
+      # SonarQube usa Elasticsearch por debajo, que exige vm.max_map_count
+      # >= 262144 en el host. Al correr dentro del Docker-in-Docker de la
+      # imagen Kasm no se puede garantizar ese ajuste del kernel del host
+      # real, asi que se desactiva esa comprobacion de arranque (recomendado
+      # por SonarQube para entornos de desarrollo/laboratorio, no producción).
+      SONAR_ES_BOOTSTRAP_CHECKS_DISABLE: "true"
+    # Puerto por defecto de SonarQube (9000); no choca con Juice Shop (3000)
+    # ni con el proxy de OWASP ZAP (8080).
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./sonarqube-data:/opt/sonarqube/data
+      - ./sonarqube-extensions:/opt/sonarqube/extensions
+      - ./sonarqube-logs:/opt/sonarqube/logs

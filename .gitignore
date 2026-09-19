@@ -31,3 +31,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Docker (docker/compose.yaml) ###
+docker/sonarqube-data/
+docker/sonarqube-extensions/
+docker/sonarqube-logs/
